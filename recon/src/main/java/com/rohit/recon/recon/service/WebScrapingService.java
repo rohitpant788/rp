@@ -119,7 +119,8 @@ public class WebScrapingService {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
             wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div#panelResults")));
 
-            return extractDonationSearchResult(driver); // this is your earlier method
+            //return extractDonationSearchResult(driver); // this is your earlier method
+            return extractAllDonationSearchResults(driver); // this is your earlier method
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
@@ -168,6 +169,62 @@ public class WebScrapingService {
             System.err.println("Error extracting search result data: " + e.getMessage());
         }
         return results;
+    }
+
+    private List<DonationSearchResultDto> extractAllDonationSearchResults(WebDriver driver) {
+        List<DonationSearchResultDto> allResults = new ArrayList<>();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        try {
+            while (true) {
+                wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div#panelResults table")));
+                WebElement table = driver.findElement(By.cssSelector("div#panelResults table"));
+                List<WebElement> rows = table.findElements(By.cssSelector("tbody tr"));
+
+                for (WebElement row : rows) {
+                    List<WebElement> cells = row.findElements(By.tagName("td"));
+                    if (cells.size() >= 14) {
+                        DonationSearchResultDto dto = new DonationSearchResultDto();
+                        dto.setDetailLink(cells.get(0).findElement(By.tagName("a")).getAttribute("href"));
+                        dto.setEntityName(cells.get(1).getText());
+                        dto.setRegister(cells.get(2).getText());
+                        dto.setCampaigningName(cells.get(3).getText());
+                        dto.setEntityType(cells.get(4).getText());
+                        dto.setValue(cells.get(5).getText());
+                        dto.setAcceptedDate(cells.get(6).getText());
+                        dto.setReceivedBy(cells.get(7).getText());
+                        dto.setDonorName(cells.get(8).getText());
+                        dto.setReportedUnder6212(cells.get(9).getText());
+                        dto.setIsSponsorship(cells.get(10).getText());
+                        dto.setDonorStatus(cells.get(11).getText());
+                        dto.setIsIrishSource(cells.get(12).getText());
+                        dto.setRegulatedDoneeType(cells.get(13).getText());
+                        dto.setCompanyRegNo(cells.size() > 14 ? cells.get(14).getText() : "");
+                        dto.setPostcode(cells.size() > 15 ? cells.get(15).getText() : "");
+                        dto.setDonationType(cells.size() > 16 ? cells.get(16).getText() : "");
+
+                        allResults.add(dto);
+                    }
+                }
+
+                // Check "Next" button's parent li class
+                WebElement nextLi = driver.findElement(By.xpath("//a[contains(text(), 'Next')]/parent::li"));
+                String liClass = nextLi.getAttribute("class");
+                if (liClass.contains("disabled")) {
+                    break; // No more pages
+                }
+
+                // Click "Next"
+                WebElement nextBtn = nextLi.findElement(By.tagName("a"));
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", nextBtn);
+
+                Thread.sleep(2000); // Let the page load
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return allResults;
     }
 
 }
