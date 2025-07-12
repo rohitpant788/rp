@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: recon
+
+scraper:
+  url: https://search.electoralcommission.org.uk/?currentPage=1&rows=10&query=&sort=AcceptedDate&order=desc&tab=1&open=filter&et=pp&et=ppm&et=tp&et=perpar&et=rd&isIrishSourceYes=true&isIrishSourceNo=true&date=Reported&prePoll=false&postPoll=true&register=gb&register=ni&register=none&quarters=2025Q1234&optCols=RegisterName&optCols=CampaigningName&optCols=AccountingUnitsAsCentralParty&optCols=IsSponsorship&optCols=IsIrishSource&optCols=RegulatedDoneeType&optCols=CompanyRegistrationNumber&optCols=Postcode&optCols=NatureOfDonation&optCols=PurposeOfVisit&optCols=DonationAction&optCols=ReportedDate&optCols=IsReportedPrePoll&optCols=ReportingPeriodName&optCols=IsBequest&optCols=IsAggregation
+
+#scraper:
+#  query-params:
+#    query: RBS
+#    currentPage: 1
+#    rows: 10
+#    sort: AcceptedDate
+#    order: desc
+#    tab: "1"
+#    quarters: 2025Q1234
+#    prePoll: false
+#    postPoll: true
+#    register:
+#      - gb
+#      - ni
+#      - none
+#    et:
+#      - pp
+#      - ppm
+#      - tp
+#      - perpar
+#      - rd
+#    isIrishSourceYes: true
+#    isIrishSourceNo: true
+#    optCols:
+#      - RegisterName
+#      - CampaigningName
+#      - AccountingUnitsAsCentralParty
+#      - IsSponsorship
+#      - IsIrishSource
+#      - RegulatedDoneeType
+#      - CompanyRegistrationNumber
+#      - Postcode
+#      - NatureOfDonation
+#      - PurposeOfVisit
+#      - DonationAction
+#      - ReportedDate
+#      - IsReportedPrePoll
+#      - ReportingPeriodName
+#      - IsBequest
+#      - IsAggregation
