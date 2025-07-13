@@ -81,6 +81,27 @@
 			<version>42.7.1</version> <!-- Or latest stable -->
 		</dependency>
 
+		<!-- Camunda Engine & Spring Boot Integration -->
+		<dependency>
+			<groupId>org.camunda.bpm.springboot</groupId>
+			<artifactId>camunda-bpm-spring-boot-starter</artifactId>
+			<version>7.23.0</version>
+		</dependency>
+
+		<!-- Optional: Embedded Tasklist / Cockpit / Admin -->
+		<dependency>
+			<groupId>org.camunda.bpm.springboot</groupId>
+			<artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
+			<version>7.23.0</version>
+		</dependency>
+
+		<!-- Optional: REST API -->
+		<dependency>
+			<groupId>org.camunda.bpm.springboot</groupId>
+			<artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
+			<version>7.23.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

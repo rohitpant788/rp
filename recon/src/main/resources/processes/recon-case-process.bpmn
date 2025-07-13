@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                  id="Definitions_1"
+                  targetNamespace="http://bpmn.io/schema/bpmn"
+                  exporter="Camunda Modeler"
+                  exporterVersion="5.27.0">
+ <bpmn:process id="reconCaseProcess"
+               name="Recon Case Review"
+               isExecutable="true"
+               camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_18xm4gx</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_18xm4gx" sourceRef="StartEvent_1" targetRef="Activity_0ann5ua" />
+    <bpmn:userTask id="Activity_0ann5ua" name="With officer">
+      <bpmn:incoming>Flow_18xm4gx</bpmn:incoming>
+      <bpmn:outgoing>Flow_1lctbut</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_12b3ijz">
+      <bpmn:incoming>Flow_1lctbut</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1lctbut" sourceRef="Activity_0ann5ua" targetRef="Event_12b3ijz" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="reconCaseProcess">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="293" y="232" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0b4wdlb_di" bpmnElement="Activity_0ann5ua">
+        <dc:Bounds x="380" y="210" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_12b3ijz_di" bpmnElement="Event_12b3ijz">
+        <dc:Bounds x="532" y="232" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_18xm4gx_di" bpmnElement="Flow_18xm4gx">
+        <di:waypoint x="329" y="250" />
+        <di:waypoint x="380" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1lctbut_di" bpmnElement="Flow_1lctbut">
+        <di:waypoint x="480" y="250" />
+        <di:waypoint x="532" y="250" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
