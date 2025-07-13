@@ -1,8 +1,13 @@
 package com.rohit.recon.recon.service;
 
 import com.rohit.recon.recon.config.ScraperUrlProperties;
+import com.rohit.recon.recon.domain.DonationSearchResult;
+import com.rohit.recon.recon.domain.ScraperJobRun;
 import com.rohit.recon.recon.dto.DonationSearchResultDto;
 import com.rohit.recon.recon.dto.DonationSummary;
+import com.rohit.recon.recon.mapper.DonationSearchResultMapper;
+import com.rohit.recon.recon.repo.DonationSearchResultRepository;
+import com.rohit.recon.recon.repo.ScraperJobRunRepository;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.AllArgsConstructor;
 import org.openqa.selenium.*;
@@ -16,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +32,9 @@ import java.util.Map;
 public class WebScrapingService {
 
     private final ScraperUrlProperties props;
+    private final ScraperConfigService scraperConfigService;
+    private final DonationSearchResultRepository donationSearchResultRepository;
+    private final ScraperJobRunRepository scraperJobRunRepository;
 
     @Scheduled(cron = "0 0 0 1 1,4,7,10 ?") // Run quarterly: Jan, Apr, Jul, Oct on 1st at 00:00
     public void searchSummary() {
@@ -43,7 +52,8 @@ public class WebScrapingService {
 
         WebDriver driver = new ChromeDriver(options);
         try {
-            String fullUrl = props.getUrl();
+            //String fullUrl = props.getUrl();
+            String fullUrl = scraperConfigService.getEffectiveUrl();
             System.out.println("Navigating to: " + fullUrl);
             driver.get(fullUrl);
 
@@ -111,20 +121,44 @@ public class WebScrapingService {
         // options.addArguments("--headless");
 
         WebDriver driver = new ChromeDriver(options);
+        boolean success = false;
+
+        List<DonationSearchResultDto> dtoList = Collections.emptyList();
+
+        String errorMessage = null;
+
         try {
-            String fullUrl = props.getUrl();
+            //String fullUrl = props.getUrl();
+            String fullUrl = scraperConfigService.getEffectiveUrl();
             driver.get(fullUrl);
 
             // Wait for full page load
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
             wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div#panelResults")));
 
-            //return extractDonationSearchResult(driver); // this is your earlier method
-            return extractAllDonationSearchResults(driver); // this is your earlier method
+            dtoList = extractAllDonationSearchResults(driver);
+
+            // Save to DB
+            List<DonationSearchResult> entities = DonationSearchResultMapper.toEntityList(dtoList);
+            donationSearchResultRepository.saveAll(entities);
+
+            success = true;
+            return dtoList; // this is your earlier method
         } catch (Exception e) {
             e.printStackTrace();
-            return Collections.emptyList();
+            success = false;
+            errorMessage = e.getMessage();
+            return dtoList;
         } finally {
+            scraperJobRunRepository.save(
+                    ScraperJobRun.builder()
+                            .jobType("donation-search-results")
+                            .runTime(LocalDateTime.now())
+                            .success(success)
+                            .recordCount(dtoList.size())
+                            .errorMessage(errorMessage)
+                            .build()
+            );
             driver.quit();
         }
     }
@@ -225,6 +259,14 @@ public class WebScrapingService {
         }
 
         return allResults;
+    }
+
+    private WebDriver createWebDriver() {
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox", "--disable-dev-shm-usage", "user-agent=Mozilla/5.0");
+        // options.addArguments("--headless"); // consider toggling via properties
+        return new ChromeDriver(options);
     }
 
 }

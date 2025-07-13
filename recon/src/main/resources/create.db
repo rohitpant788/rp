@@ -1,0 +1,32 @@
+First Table
+--
+CREATE TABLE public.scraper_config (
+	"key" varchar(255) NULL,
+	value varchar NULL
+);
+--
+
+Second Table
+--
+CREATE TABLE donation_search_result (
+    id SERIAL PRIMARY KEY,
+    detail_link TEXT,
+    entity_name VARCHAR(255),
+    register VARCHAR(100),
+    campaigning_name VARCHAR(255),
+    entity_type VARCHAR(100),
+    value VARCHAR(50),
+    accepted_date VARCHAR(50), -- or DATE if format is consistent
+    received_by VARCHAR(255),
+    donor_name VARCHAR(255),
+    reported_under_6212 VARCHAR(50),
+    is_sponsorship VARCHAR(50),
+    donor_status VARCHAR(100),
+    is_irish_source VARCHAR(50),
+    regulated_donee_type VARCHAR(100),
+    company_reg_no VARCHAR(100),
+    postcode VARCHAR(50),
+    donation_type VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
