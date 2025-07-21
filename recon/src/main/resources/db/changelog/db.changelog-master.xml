@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- 1. donation_search_result -->
+    <changeSet id="1-create-donation-search-result" author="rohit">
+        <createTable tableName="donation_search_result">
+            <column name="id" type="serial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="detail_link" type="text"/>
+            <column name="entity_name" type="varchar(255)"/>
+            <column name="register" type="varchar(100)"/>
+            <column name="campaigning_name" type="varchar(255)"/>
+            <column name="entity_type" type="varchar(100)"/>
+            <column name="value" type="varchar(50)"/>
+            <column name="accepted_date" type="varchar(50)"/>
+            <column name="received_by" type="varchar(255)"/>
+            <column name="donor_name" type="varchar(255)"/>
+            <column name="reported_under_6212" type="varchar(50)"/>
+            <column name="is_sponsorship" type="varchar(50)"/>
+            <column name="donor_status" type="varchar(100)"/>
+            <column name="is_irish_source" type="varchar(50)"/>
+            <column name="regulated_donee_type" type="varchar(100)"/>
+            <column name="company_reg_no" type="varchar(100)"/>
+            <column name="postcode" type="varchar(50)"/>
+            <column name="donation_type" type="varchar(100)"/>
+            <column name="created_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+        <addUniqueConstraint tableName="donation_search_result"
+                             columnNames="detail_link"
+                             constraintName="uq_detail_link"/>
+    </changeSet>
+
+    <!-- 2. recon_data_case -->
+    <changeSet id="2-create-recon-data-case" author="rohit">
+        <createTable tableName="recon_data_case">
+            <column name="id" type="serial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="case_id" type="varchar(20)"/>
+            <column name="detail_link" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="entity_name" type="varchar(255)"/>
+            <column name="register" type="varchar(100)"/>
+            <column name="campaigning_name" type="varchar(255)"/>
+            <column name="entity_type" type="varchar(100)"/>
+            <column name="value" type="varchar(50)"/>
+            <column name="accepted_date" type="varchar(50)"/>
+            <column name="received_by" type="varchar(255)"/>
+            <column name="donor_name" type="varchar(255)"/>
+            <column name="reported_under_6212" type="varchar(50)"/>
+            <column name="is_sponsorship" type="varchar(50)"/>
+            <column name="donor_status" type="varchar(100)"/>
+            <column name="is_irish_source" type="varchar(50)"/>
+            <column name="regulated_donee_type" type="varchar(100)"/>
+            <column name="company_reg_no" type="varchar(100)"/>
+            <column name="postcode" type="varchar(50)"/>
+            <column name="donation_type" type="varchar(100)"/>
+            <column name="status" type="varchar(50)" defaultValue="DRAFT"/>
+            <column name="process_instance_id" type="varchar(100)"/>
+            <column name="created_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+        <addUniqueConstraint tableName="recon_data_case"
+                             columnNames="case_id"
+                             constraintName="recon_data_case_case_id_key"/>
+    </changeSet>
+
+    <!-- 3. scraper_config -->
+    <changeSet id="3-create-scraper-config" author="rohit">
+        <createTable tableName="scraper_config">
+            <column name="key" type="varchar(255)"/>
+            <column name="value" type="varchar"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 4. scraper_job_run -->
+    <changeSet id="4-create-scraper-job-run" author="rohit">
+        <createTable tableName="scraper_job_run">
+            <column name="id" type="serial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="job_type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="run_time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="success" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="record_count" type="int"/>
+            <column name="error_message" type="text"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
